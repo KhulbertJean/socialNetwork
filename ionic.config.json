@@ -1,0 +1,7 @@
+{
+  "name": "JSP-front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

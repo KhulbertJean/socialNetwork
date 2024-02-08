@@ -1,22 +1,12 @@
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { enableProdMode } from '@angular/core';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import * as fs from 'fs';
-import * as morgan from 'morgan';
-import { AppModule } from './root';
+import { AppModule } from './app/app.module';
+import { environment } from './environments/environment';
 
-
-
-const logStream = fs.createWriteStream('api.log', {
-  flags: 'a', // append
-});
-
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.enableCors();
-  app.setGlobalPrefix('api');
-  app.useGlobalPipes(new ValidationPipe());
-  app.use(morgan('tiny', { stream: logStream }));
-  await app.listen(3000);
+if (environment.production) {
+  enableProdMode();
 }
-bootstrap();
+
+platformBrowserDynamic().bootstrapModule(AppModule)
+  .catch(err => console.log(err));
