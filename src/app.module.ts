@@ -20,7 +20,7 @@ import { ChatModule } from './chat/chat.module';
       password: 'password',
       database: 'socialnetwork',
       autoLoadEntities: true,
-      synchronize: true, // shouldn't be used in production - may lose data
+      synchronize: true,
     }),
     FeedModule,
     AuthModule,
