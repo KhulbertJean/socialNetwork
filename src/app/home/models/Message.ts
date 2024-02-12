@@ -1,5 +1,5 @@
-import { User } from 'src/app/auth/models/user.model';
-import { Conversation } from './Conversation';
+import { User } from 'src/app/auth/models/user.model.js';
+import { Conversation } from './Conversation.js';
 
 export interface Message {
     id?: number;

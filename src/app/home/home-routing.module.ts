@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChatComponent } from './components/chat/chat.component';
-import { ConnectionProfileComponent } from './components/connection-profile/connection-profile.component';
-import { UserProfileComponent } from './components/user-profile/user-profile.component';
-import { HomePage } from './home.page';
+import { ChatComponent } from './components/chat/chat.component.js';
+import { ConnectionProfileComponent } from './components/connection-profile/connection-profile.component.js';
+import { UserProfileComponent } from './components/user-profile/user-profile.component.js';
+import { HomePage } from './home.page.js';
 
 const routes: Routes = [
   {

@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AuthPageRoutingModule } from './auth-routing.module';
+import { AuthPageRoutingModule } from './auth-routing.module.js';
 
-import { AuthPage } from './auth.page';
+import { AuthPage } from './auth.page.js';
 
 @NgModule({
     imports: [

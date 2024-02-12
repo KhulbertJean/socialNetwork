@@ -2,13 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, UrlSegment } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
-import { User } from 'src/app/auth/models/user.model';
+import { User } from 'src/app/auth/models/user.model.js';
 import {
   FriendRequestStatus,
   FriendRequest_Status,
-} from '../../models/FriendRequest';
-import { BannerColorService } from '../../services/banner-color.service';
-import {ConnectionProfileService} from "../../services/connectin-profile.service";
+} from '../../models/FriendRequest.js';
+import { BannerColorService } from '../../services/banner-color.service.js';
+import {ConnectionProfileService} from "../../services/connection-profile.service.js";
 
 
 @Component({
@@ -72,10 +72,14 @@ export class ConnectionProfileComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnDestroy(): void {
-    this.userSubscription$.unsubscribe();
-    this.friendRequestStatusSubscription$.unsubscribe();
-  }
+    ngOnDestroy(): void {
+        if (this.userSubscription$) {
+            this.userSubscription$.unsubscribe();
+        }
+        if (this.friendRequestStatusSubscription$) {
+            this.friendRequestStatusSubscription$.unsubscribe();
+        }
+    }
 
   private getUserIdFromUrl(): Observable<number> {
     return this.route.url.pipe(

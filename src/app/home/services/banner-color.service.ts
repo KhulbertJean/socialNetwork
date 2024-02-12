@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Role } from 'src/app/auth/models/user.model';
+import { Role } from 'src/app/auth/models/user.model.js';
 
 type BannerColors = {
     colorOne: string;

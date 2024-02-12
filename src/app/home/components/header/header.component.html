@@ -28,30 +28,28 @@
             <ion-icon name="home"></ion-icon>
             <div>Home</div>
           </ion-col>
-          <ion-col
-                  (click)="
-              this.connectionProfileService.friendRequests?.length > 0 &&
-                presentFriendRequestPopover($event)
-            "
-                  class="ion-hide-md-down"
-                  size="auto"
-          >
+          <ion-col *ngIf="connectionProfileService.friendRequests$ | async as friendRequests">
             <ion-icon name="people"></ion-icon>
             <ion-badge
                     color="danger"
                     style="
-                position: absolute;
-                margin-left: -8px;
-                margin-top: -5px;
-                height: 16px;
-                width: 16px;
-                border-radius: 9999px;
-              "
+            position: absolute;
+            margin-left: -8px;
+            margin-top: -5px;
+            height: 16px;
+            width: 16px;
+            border-radius: 9999px;
+        "
+                    *ngIf="friendRequests.length > 0"
+                    (click)="presentFriendRequestPopover($event)"
             >
-              {{ this.connectionProfileService.friendRequests?.length || 0 }}
+              {{ friendRequests.length }}
             </ion-badge>
             <div>My Network</div>
           </ion-col>
+
+
+
           <ion-col class="ion-hide-md-down" size="auto">
             <ion-icon name="briefcase"></ion-icon>
             <div>Jobs</div>

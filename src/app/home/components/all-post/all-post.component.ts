@@ -9,30 +9,31 @@ import {
 import { IonInfiniteScroll, ModalController } from '@ionic/angular';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { User } from 'src/app/auth/models/user.model';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { Post } from '../../models/Post';
-import { PostService } from '../../services/post.service';
-import { ModalComponent } from '../start-post/modal/modal.component';
+import { User } from 'src/app/auth/models/user.model.js';
+import { AuthService } from 'src/app/auth/services/auth.service.js';
+
+import { PostService } from '../../services/post.service.js';
+import { ModalComponent } from '../start-post/modal/modal.component.js';
+import {Post} from "../../models/Post.js";
 
 @Component({
   selector: 'app-all-posts',
-  templateUrl: './all-posts.component.html',
-  styleUrls: ['./all-posts.component.scss'],
+  templateUrl: './all-post.component.html',
+  styleUrls: ['./all-post.component.scss'],
 })
 export class AllPostsComponent implements OnInit, OnDestroy {
-  @ViewChild(IonInfiniteScroll) infiniteScroll: IonInfiniteScroll;
+  @ViewChild(IonInfiniteScroll) infiniteScroll!: IonInfiniteScroll;
 
   @Input() postBody?: string;
 
-  private userSubscription: Subscription;
+  private userSubscription!: Subscription;
 
-  queryParams: string;
+  queryParams!: string;
   allLoadedPosts: Post[] = [];
   numberOfPosts = 5;
   skipPosts = 0;
 
-  userId$ = new BehaviorSubject<number>(null);
+  userId$ = new BehaviorSubject<number>(0);
 
   constructor(
       private postService: PostService,
@@ -42,15 +43,18 @@ export class AllPostsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userSubscription = this.authService.userStream.subscribe(
-        (user: User) => {
-          this.allLoadedPosts.forEach((post: Post, index: number) => {
-            if (user?.imagePath && post.author.id === user.id) {
-              this.allLoadedPosts[index]['fullImagePath'] =
-                  this.authService.getFullImagePath(user.imagePath);
-            }
-          });
+        (user: User | null) => { // Modifier le type de 'user' pour inclure 'null'
+          if (user) {
+            this.allLoadedPosts.forEach((post: any, index: number) => { // Utilisez 'any' pour 'post'
+              if (user?.imagePath && post.author.id === user.id) {
+                post['fullImagePath'] = this.authService.getFullImagePath(user.imagePath); // Accédez à la propriété dynamiquement
+              }
+            });
+          }
         }
     );
+
+
 
     this.getPosts(false, '');
 
@@ -60,20 +64,21 @@ export class AllPostsComponent implements OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    const postBody = changes.postBody.currentValue;
+    const postBody = changes['postBody'].currentValue; // Accédez à 'postBody' en utilisant la notation d'index
     if (!postBody) return;
 
-    this.postService.createPost(postBody).subscribe((post: Post) => {
+    this.postService.createPost(postBody).subscribe((post: any) => { // Utilisation de 'any' pour 'post'
       this.authService.userFullImagePath
           .pipe(take(1))
           .subscribe((fullImagePath: string) => {
-            post['fullImagePath'] = fullImagePath;
+            post['fullImagePath'] = fullImagePath; // Utilisation de la notation d'index pour ajouter la propriété 'fullImagePath'
             this.allLoadedPosts.unshift(post);
           });
     });
   }
 
-  getPosts(isInitialLoad: boolean, event) {
+
+  getPosts(isInitialLoad: boolean, event: any) {
     if (this.skipPosts === 20) {
       event.target.disabled = true;
     }
@@ -83,14 +88,12 @@ export class AllPostsComponent implements OnInit, OnDestroy {
         .getSelectedPosts(this.queryParams)
         .subscribe((posts: Post[]) => {
           for (let postIndex = 0; postIndex < posts.length; postIndex++) {
-            const doesAuthorHaveImage = !!posts[postIndex].author.imagePath;
-            let fullImagePath = this.authService.getDefaultFullImagePath();
-            if (doesAuthorHaveImage) {
-              fullImagePath = this.authService.getFullImagePath(
-                  posts[postIndex].author.imagePath
-              );
+            const authorImagePath = posts[postIndex].author?.imagePath; // Utilisation de '?' pour vérifier si 'imagePath' existe sur 'author'
+            let fullImagePath = authorImagePath ?? this.authService.getDefaultFullImagePath(); // Utilisation de l'opérateur de coalescence nulle (??) pour fournir une valeur par défaut
+            if (authorImagePath) {
+              fullImagePath = this.authService.getFullImagePath(authorImagePath);
             }
-            posts[postIndex]['fullImagePath'] = fullImagePath;
+            (posts[postIndex] as any)['fullImagePath'] = fullImagePath; // Assertion de type pour permettre l'ajout de 'fullImagePath'
             this.allLoadedPosts.push(posts[postIndex]);
           }
           if (isInitialLoad) event.target.complete();
@@ -98,7 +101,9 @@ export class AllPostsComponent implements OnInit, OnDestroy {
         });
   }
 
-  loadData(event) {
+
+
+  loadData(event: any) {
     this.getPosts(true, event);
   }
 

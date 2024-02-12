@@ -1,3 +1,5 @@
+import {User} from "../../auth/models/user.model.js";
+
 export type FriendRequest_Status =
     | 'not-sent'
     | 'pending'
@@ -13,5 +15,7 @@ export interface FriendRequest {
     id: number;
     creatorId: number;
     receiverId: number;
+    fullImagePath?: string;
+    creator?: User;
     status?: FriendRequest_Status;
 }

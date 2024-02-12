@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
+  "type": "module",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -50,6 +51,7 @@
     "@capacitor/cli": "^5.7.0",
     "@ionic/angular-toolkit": "^9.0.0",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "^20.11.17",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^7.26.0",

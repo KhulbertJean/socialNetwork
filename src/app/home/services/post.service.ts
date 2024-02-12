@@ -2,9 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, take, tap } from 'rxjs/operators';
 
-import { ErrorHandlerService } from 'src/app/core/error-handler.service';
-import { environment } from 'src/environments/environment';
-import { Post } from '../models/Post';
+import { ErrorHandlerService } from 'src/app/core/error-handler.service.js';
+import { environment } from 'src/environments/environment.js';
+import { Post } from '../models/Post.js';
 
 @Injectable({
     providedIn: 'root',

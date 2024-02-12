@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/services/auth.service';
+import { AuthService } from 'src/app/auth/services/auth.service.js';
 
 @Component({
   selector: 'app-modal',
@@ -11,36 +11,39 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnInit, OnDestroy {
-  @ViewChild('form', { static: true }) form!: NgForm; // Utilisation de l'opérateur de non-null assertion
+  @ViewChild('form', { static: true }) form!: NgForm;
 
   @Input() postId?: number;
 
-  fullName$ = new BehaviorSubject<string>(''); // Définition d'une valeur par défaut
+  fullName$ = new BehaviorSubject<string>('');
   fullName = '';
 
-  userFullImagePath: string = ''; // Initialisation de la propriété
-  private userImagePathSubscription!: Subscription; // Utilisation de l'opérateur de non-null assertion
+  userFullImagePath: string = '';
+  private userImagePathSubscription!: Subscription;
 
   constructor(
       public modalController: ModalController,
       private authService: AuthService
   ) {}
 
-  ngOnInit() {
-    this.userImagePathSubscription =
-        this.authService.userFullImagePath.subscribe((fullImagePath: string) => {
-          this.userFullImagePath = fullImagePath;
-        });
+    ngOnInit() {
+        this.userImagePathSubscription =
+            this.authService.userFullImagePath.subscribe((fullImagePath: string) => {
+                this.userFullImagePath = fullImagePath;
+            });
 
-    this.authService.userFullName
-        .pipe(take(1))
-        .subscribe((fullName: string) => {
-          this.fullName = fullName;
-          this.fullName$.next(fullName);
-        });
-  }
+        this.authService.userFullName
+            .pipe(take(1))
+            .subscribe((fullName: string | null) => {
+                if (fullName !== null) { // Vérifiez si fullName n'est pas null avant d'appeler next
+                    this.fullName = fullName;
+                    this.fullName$.next(fullName);
+                }
+            });
+    }
 
-  onDismiss() {
+
+    onDismiss() {
     this.modalController.dismiss(null, 'dismiss');
   }
 

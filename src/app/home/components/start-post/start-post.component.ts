@@ -7,9 +7,9 @@ import {
 } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/services/auth.service';
+import { AuthService } from 'src/app/auth/services/auth.service.js';
 
-import { ModalComponent } from './modal/modal.component';
+import { ModalComponent } from './modal/modal.component.js';
 
 @Component({
   selector: 'app-start-post',
@@ -19,8 +19,8 @@ import { ModalComponent } from './modal/modal.component';
 export class StartPostComponent implements OnInit, OnDestroy {
   @Output() create: EventEmitter<any> = new EventEmitter();
 
-  userFullImagePath: string;
-  private userImagePathSubscription: Subscription;
+  userFullImagePath!: string;
+  private userImagePathSubscription!: Subscription;
 
   constructor(
       public modalController: ModalController,

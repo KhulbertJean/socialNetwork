@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { filter, take, tap } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import { FriendRequest } from '../../models/FriendRequest';
-import { FriendRequestsPopoverComponent } from './friend-requests-popover/friend-requests-popover.component';
-import { PopoverComponent } from './popover/popover.component';
-import {ConnectionProfileService} from "../../services/connectin-profile.service";
+import { take, tap} from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/services/auth.service.js';
+import { PopoverComponent } from './popover/popover.component.js';
+import { ConnectionProfileService } from "../../services/connection-profile.service.js";
+import {FriendRequest} from "../../models/FriendRequest.js";
+import {FriendRequestsPopoverComponent} from "./friend-requests-popover/friend-requests-popover.component.js";
 
 @Component({
   selector: 'app-header',
@@ -14,11 +14,12 @@ import {ConnectionProfileService} from "../../services/connectin-profile.service
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  userFullImagePath: string;
-  private userImagePathSubscription: Subscription;
+  userFullImagePath!: string;
+  fullName!: string;
+  private userImagePathSubscription!: Subscription;
 
-  friendRequests: FriendRequest[];
-  private friendRequestsSubscription: Subscription;
+  friendRequests!: FriendRequest[];
+  private friendRequestsSubscription!: Subscription;
 
   constructor(
       public popoverController: PopoverController,
@@ -34,8 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             tap(({ imageName }) => {
               const defaultImagePath = 'blank-profile-picture.png';
               this.authService
-                  .updateUserImagePath(imageName || defaultImagePath)
-                  .subscribe();
+                  .updateUserImagePath(imageName || defaultImagePath);
             })
         )
         .subscribe();
@@ -45,14 +45,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.userFullImagePath = fullImagePath;
         });
 
+    this.authService.userFullName
+        .pipe(
+            take(1)
+        )
+        .subscribe((fullName: string | null) => {
+          if (fullName) {
+            this.fullName = fullName;
+          }
+        });
+    this.friendRequests = [];
+
     this.friendRequestsSubscription = this.connectionProfileService
         .getFriendRequests()
         .subscribe((friendRequests: FriendRequest[]) => {
-          this.connectionProfileService.friendRequests = friendRequests.filter(
+          this.friendRequests = friendRequests.filter(
               (friendRequest: FriendRequest) => friendRequest.status === 'pending'
           );
         });
   }
+
+
 
   async presentPopover(ev: any) {
     const popover = await this.popoverController.create({

@@ -1,8 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NewUser } from './models/newUser.model';
-import { AuthService } from './services/auth.service';
+import { NewUser } from './models/newUser.model.js';
+import { AuthService } from './services/auth.service.js';
 
 @Component({
     selector: 'app-auth',

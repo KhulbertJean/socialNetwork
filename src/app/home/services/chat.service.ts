@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { Observable } from 'rxjs';
-import { User } from 'src/app/auth/models/user.model';
-import { ChatSocketService } from 'src/app/core/chat-socket.service';
-import { environment } from 'src/environments/environment';
-import {Conversation} from "../models/Conversation";
-import {Message} from "../models/Message";
+import { User } from 'src/app/auth/models/user.model.js';
+import { ChatSocketService } from 'src/app/core/chat-socket.service.js';
+import { environment } from 'src/environments/environment.js';
+import {Conversation} from "../models/Conversation.js";
+import {Message} from "../models/Message.js";
 
 
 @Injectable({

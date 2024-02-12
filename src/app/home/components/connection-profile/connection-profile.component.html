@@ -38,16 +38,18 @@
       <ng-container
               *ngIf="
           ['not-sent', 'pending', 'waiting-for-current-user-response'].includes(
-            friendRequestStatus
-          )
+    friendRequestStatus!
+)
+
         "
       >
         <ion-button
                 (click)="addUser()"
                 [disabled]="
-            ['pending', 'waiting-for-current-user-response'].includes(
-              friendRequestStatus
-            )
+            ['not-sent', 'pending', 'waiting-for-current-user-response'].includes(
+    friendRequestStatus!
+)
+
           "
                 shape="round"
         >{{

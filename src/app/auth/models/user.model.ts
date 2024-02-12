@@ -1,4 +1,4 @@
-import { Post } from 'src/app/home/models/Post';
+import { Post } from 'src/app/home/models/Post.js';
 
 export type Role = 'admin' | 'premium' | 'user';
 

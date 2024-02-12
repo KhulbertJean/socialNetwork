@@ -3,7 +3,7 @@ import { PopoverController } from '@ionic/angular';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { AuthService } from 'src/app/auth/services/auth.service';
+import { AuthService } from 'src/app/auth/services/auth.service.js';
 
 @Component({
   selector: 'app-popover',
@@ -11,10 +11,10 @@ import { AuthService } from 'src/app/auth/services/auth.service';
   styleUrls: ['./popover.component.scss'],
 })
 export class PopoverComponent implements OnInit, OnDestroy {
-  userFullImagePath: string;
-  private userImagePathSubscription: Subscription;
+  userFullImagePath!: string;
+  private userImagePathSubscription!: Subscription;
 
-  fullName$ = new BehaviorSubject<string>(null);
+  fullName$ = new BehaviorSubject<string>('');
   fullName = '';
 
   constructor(
@@ -30,10 +30,13 @@ export class PopoverComponent implements OnInit, OnDestroy {
 
     this.authService.userFullName
         .pipe(take(1))
-        .subscribe((fullName: string) => {
-          this.fullName = fullName;
-          this.fullName$.next(fullName);
+        .subscribe((fullName: string | null) => {
+          if (fullName !== null) {
+            this.fullName = fullName;
+            this.fullName$.next(fullName);
+          }
         });
+
   }
 
   async onSignOut() {

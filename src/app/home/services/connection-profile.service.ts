@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { User } from 'src/app/auth/models/user.model';
-import { environment } from 'src/environments/environment';
-import { FriendRequest, FriendRequestStatus } from "../models/FriendRequest";
+import { User } from 'src/app/auth/models/user.model.js';
+import { environment } from 'src/environments/environment.js';
+import { FriendRequest, FriendRequestStatus } from "../models/FriendRequest.js";
 
 @Injectable({
     providedIn: 'root',
@@ -59,5 +59,11 @@ export class ConnectionProfileService {
         ).pipe(
             catchError(error => throwError('Erreur lors de la réponse à la demande d\'ami'))
         );
+    }
+    private friendRequestsSubject: BehaviorSubject<FriendRequest[]> = new BehaviorSubject<FriendRequest[]>([]);
+    public friendRequests$: Observable<FriendRequest[]> = this.friendRequestsSubject.asObservable();
+
+    setFriendRequests(friendRequests: FriendRequest[]): void {
+        this.friendRequestsSubject.next(friendRequests);
     }
 }
